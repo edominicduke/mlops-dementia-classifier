@@ -6,11 +6,13 @@ import pandas as pd
 import numpy as np
 
 # Download the dataset as a pandas DataFrame.
-df = pd.read_csv("../../data/raw/dementia_dataset.csv")
+df = pd.read_csv("data/raw/dementia_dataset.csv")
 print(df.head(10))
+print("")
 
 # Report the number of duplicated rows.
 print("Number of duplicated rows:", df.duplicated().sum())
+print("")
 
 # Find possible inconsistent values for the variables.
 
@@ -38,11 +40,13 @@ print("")
 age_column = df["Age"]
 num_age_vals_not_in_range = age_column[age_column < 60].size + age_column[age_column > 96].size
 print("Number of values that do not satisfy Age ∈ [60, 96]:", num_age_vals_not_in_range)
+print("")
 
 # Check that MMSE ∈ [0, 30] and print the number of values that do not follow this criteria.
 mmse_column = df["MMSE"]
 num_mmse_vals_not_in_range = mmse_column[mmse_column < 0].size + mmse_column[mmse_column > 30].size
 print("Number of values that do not satisfy MMSE ∈ [0, 30]:", num_mmse_vals_not_in_range)
+print("")
 
 # Check that CDR ∈ {0, 0.5, 1, 2, 3} and print the number of values that do not follow this criteria.
 cdr_column = df["CDR"]
@@ -54,26 +58,31 @@ print("")
 ses_column = df["SES"]
 num_ses_vals_not_in_range = ses_column[ses_column < 1].size + ses_column[ses_column > 5].size
 print("Number of values that do not satisfy SES ∈ [1, 5]:", num_ses_vals_not_in_range)
+print("")
 
 # Check that EDUC ∈ [5, 25] and print the number of values that do not follow this criteria.
 educ_column = df["EDUC"]
 num_educ_vals_not_in_range = educ_column[educ_column < 5].size + educ_column[educ_column > 25].size
 print("Number of values that do not satisfy EDUC ∈ [5, 25]:", num_educ_vals_not_in_range)
+print("")
 
 # Check that nWBV ∈ [0, 1] and print the number of values that do not follow this criteria.
 nwbv_column = df["nWBV"]
 num_nwbv_vals_not_in_range = nwbv_column[nwbv_column < 0].size + nwbv_column[nwbv_column > 1].size
 print("Number of values that do not satisfy nWBV ∈ [0, 1]:", num_nwbv_vals_not_in_range)
+print("")
 
 # Check that eTIV > 0 and print the number of values that do not follow this criteria.
 etiv_column = df["eTIV"]
 num_etiv_vals_not_in_range = etiv_column[etiv_column <= 0].size
 print("Number of values that do not satisfy eTIV > 0:", num_etiv_vals_not_in_range)
+print("")
 
 # Check that ASF > 0 and print the number of values that do not follow this criteria.
 asf_column = df["ASF"]
 num_asf_vals_not_in_range = asf_column[asf_column <= 0].size
 print("Number of values that do not satisfy ASF > 0:", num_asf_vals_not_in_range)
+print("")
 
 # II) Logical Checks
 

@@ -4,10 +4,12 @@ be using in our ML pipeline to train our simple classification model.
 """
 import pandas as pd
 import seaborn as sns
+import matplotlib.pyplot as plt
 
 # Download the dataset as a pandas DataFrame.
-df = pd.read_csv("../../data/raw/dementia_dataset.csv")
+df = pd.read_csv("data/raw/dementia_dataset.csv")
 print(df.head(10))
+print("")
 
 # Determine correlations between pairs of numerical variables.
 
@@ -17,9 +19,6 @@ numerical_vars = ["Visit", "MR Delay", "Age", "EDUC", "SES", "MMSE", "CDR", "eTI
 # Create a correlation matrix for all the numerical columns.
 corr_matrix = df[numerical_vars].corr()
 
-# Generate a correlation heatmap from the correlation matrix.
-sns.heatmap(corr_matrix)
-
 # For each numerical variable, print the other numerical variables it has meaningful correlation with.
 for var in numerical_vars:
     print(var + ": ")
@@ -28,3 +27,6 @@ for var in numerical_vars:
     print(meaningful_corr_vals.head(10))
     print("")
 
+# Generate a correlation heatmap from the correlation matrix. You can see a saved version of it as fig1 in the docs/data_plots folder for reference.
+sns.heatmap(corr_matrix)
+plt.show()
