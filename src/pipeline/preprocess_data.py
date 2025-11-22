@@ -61,9 +61,9 @@ def preprocess_cleaned_data(df):
     numerical_vars_to_transform = ["Visit", "MR Delay", "Age", "EDUC", "SES", "MMSE", "CDR", "eTIV", "nWBV", "ASF"]
     for var in numerical_vars_to_transform:
         df[var] = scaler.fit_transform(df[[var]])
-
-    # Output this preprocessed DataFrame as a csv file.
-    #df.to_csv("../../data/processed/preprocessed_dementia_dataset.csv")
+    
+    # Output this cleaned DataFrame as a csv file.
+    df.to_csv("data/processed/preprocessed_dementia_dataset.csv", index=False)
 
     # Return the fully preprocessed Pandas DataFrame.
     return df
