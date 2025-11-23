@@ -1,0 +1,11 @@
+2025-11-23 16:16:40,447 — INFO — Loading dataset...
+2025-11-23 16:16:40,458 — INFO — Data split complete.
+2025-11-23 16:16:40,458 — INFO — Model initialized: xgboost
+2025-11-23 16:16:40,458 — INFO — Starting hyperparameter tuning...
+2025-11-23 16:16:42,431 — INFO — Best params found: {'n_estimators': 100, 'max_depth': 3}
+2025-11-23 16:16:42,433 — INFO — config.yaml updated with optimized hyperparameters.
+2025-11-23 16:16:42,433 — INFO — Training final model...
+2025-11-23 16:16:42,484 — INFO — Checkpoint saved to models/checkpoints/xgboost_checkpoint.pkl
+2025-11-23 16:16:42,485 — INFO — Validation Accuracy: 0.9143
+2025-11-23 16:16:42,486 — INFO — Final model saved to models/trained/xgboost_final.pkl
+2025-11-23 16:16:42,486 — INFO — Training complete.

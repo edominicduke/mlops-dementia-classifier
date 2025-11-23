@@ -1,0 +1,24 @@
+data:
+  path: data/processed/engineered_dementia_dataset.csv
+  test_ratio: 0.2
+  val_ratio: 0.1
+  random_seed: 42
+model:
+  type: xgboost
+  params:
+    random_forest:
+      n_estimators: 300
+      max_depth: 6
+      min_samples_split: 4
+      min_samples_leaf: 2
+    xgboost:
+      n_estimators: 100
+      max_depth: 3
+tuning:
+  enabled: true
+  n_iter: 20
+logging:
+  checkpoints: docs/models/checkpoints/
+  trained: docs/models/trained/
+  logs: docs/outputs/logs/
+  results: docs/outputs/results/
