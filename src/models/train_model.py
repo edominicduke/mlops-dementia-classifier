@@ -2,8 +2,9 @@ import yaml
 import pandas as pd
 import json
 import joblib
-import mlflow
-import mlflow.sklearn
+import wandb   #
+# Code followed by a # was generated from ChatGPT 5.1 at 5:21 on 11/23 to ensure proper Weights and Biases Deployment after issues with FlowML
+
 from pathlib import Path
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.ensemble import RandomForestClassifier
@@ -53,76 +54,87 @@ def main():
 
     logger = get_logger("training", str(logs_dir / "training.log"))
 
-    with mlflow.start_run(run_name="training"):
-        data_path = project_root / cfg["data"]["path"]
-        df = pd.read_csv(data_path)
+    wandb.init(project="dementia-ml", name="training")   #
 
-        X = df.drop(columns=["Group"])
-        y = df["Group"]
+    data_path = project_root / cfg["data"]["path"]
+    df = pd.read_csv(data_path)
 
-        X_train, X_temp, y_train, y_temp = train_test_split(
-            X, y,
-            test_size=cfg["data"]["test_ratio"] + cfg["data"]["val_ratio"],
-            stratify=y,
-            random_state=cfg["data"]["random_seed"]
+    X = df.drop(columns=["Group"])
+    y = df["Group"]
+
+    X_train, X_temp, y_train, y_temp = train_test_split(
+        X, y,
+        test_size=cfg["data"]["test_ratio"] + cfg["data"]["val_ratio"],
+        stratify=y,
+        random_state=cfg["data"]["random_seed"]
+    )
+
+    val_ratio_adj = cfg["data"]["val_ratio"] / (cfg["data"]["test_ratio"] + cfg["data"]["val_ratio"])
+
+    X_val, X_test, y_val, y_test = train_test_split(
+        X_temp, y_temp,
+        test_size=1 - val_ratio_adj,
+        stratify=y_temp,
+        random_state=cfg["data"]["random_seed"]
+    )
+
+    model_type = cfg["model"]["type"]
+    params = cfg["model"]["params"][model_type]
+
+    wandb.log({"params": params})   #
+
+    model = get_model(model_type, params)
+
+    if cfg["tuning"]["enabled"]:
+        search_space = {
+            "n_estimators": [100, 200, 400, 600],
+            "max_depth": [3, 4, 5, 6, 8],
+        }
+
+        search = RandomizedSearchCV(
+            estimator=model,
+            param_distributions=search_space,
+            n_iter=cfg["tuning"]["n_iter"],
+            cv=3,
+            n_jobs=-1,
+            verbose=2
         )
 
-        val_ratio_adj = cfg["data"]["val_ratio"] / (cfg["data"]["test_ratio"] + cfg["data"]["val_ratio"])
+        search.fit(X_train, y_train)
 
-        X_val, X_test, y_val, y_test = train_test_split(
-            X_temp, y_temp,
-            test_size=1 - val_ratio_adj,
-            stratify=y_temp,
-            random_state=cfg["data"]["random_seed"]
-        )
+        best_params = search.best_params_
+        model = search.best_estimator_
 
-        model_type = cfg["model"]["type"]
-        params = cfg["model"]["params"][model_type]
+        wandb.log({"best_params": best_params})   #
+        update_config_with_best_params(cfg, best_params)
 
-        model = get_model(model_type, params)
-        mlflow.log_params(params)
+    model.fit(X_train, y_train)
 
-        if cfg["tuning"]["enabled"]:
-            search_space = {
-                "n_estimators": [100, 200, 400, 600],
-                "max_depth": [3, 4, 5, 6, 8],
-            }
+    checkpoint_path = checkpoints_dir / f"{model_type}_checkpoint.pkl"
+    joblib.dump(model, checkpoint_path)
 
-            search = RandomizedSearchCV(
-                estimator=model,
-                param_distributions=search_space,
-                n_iter=cfg["tuning"]["n_iter"],
-                cv=3,
-                n_jobs=-1,
-                verbose=2
-            )
+    artifact = wandb.Artifact("checkpoint", type="model")   #
+    artifact.add_file(str(checkpoint_path))   #
+    wandb.log_artifact(artifact)   #
 
-            search.fit(X_train, y_train)
+    val_acc = accuracy_score(y_val, model.predict(X_val))
+    wandb.log({"val_accuracy": val_acc})   #
 
-            best_params = search.best_params_
-            model = search.best_estimator_
+    final_path = trained_dir / f"{model_type}_final.pkl"
+    joblib.dump(model, final_path)
 
-            mlflow.log_params(best_params)
-            update_config_with_best_params(cfg, best_params)
+    final_art = wandb.Artifact("final_model", type="model")   #
+    final_art.add_file(str(final_path))   #
+    wandb.log_artifact(final_art)   #
 
-        model.fit(X_train, y_train)
+    results = {"val_accuracy": val_acc}
+    results_file = results_dir / "training_results.json"
+    with open(results_file, "w") as f:
+        json.dump(results, f, indent=4)
 
-        checkpoint_path = checkpoints_dir / f"{model_type}_checkpoint.pkl"
-        joblib.dump(model, checkpoint_path)
-        mlflow.log_artifact(str(checkpoint_path))
-
-        val_acc = accuracy_score(y_val, model.predict(X_val))
-        mlflow.log_metric("val_accuracy", val_acc)
-
-        final_path = trained_dir / f"{model_type}_final.pkl"
-        joblib.dump(model, final_path)
-        mlflow.sklearn.log_model(model, "final_model")
-
-        results = {"val_accuracy": val_acc}
-        results_file = results_dir / "training_results.json"
-        with open(results_file, "w") as f:
-            json.dump(results, f, indent=4)
-        mlflow.log_artifact(str(results_file))
+    results_art = wandb.Artifact("training_results", type="results")   #
+    results_art.add_file(str(results_file))   #
+    wandb.log_artifact(results_art)   #
 
 
 if __name__ == "__main__":
