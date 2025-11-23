@@ -1,0 +1,49 @@
+_wandb:
+    value:
+        cli_version: 0.23.0
+        e:
+            p0tvw6yphrmcts9knn21m3jtla6g09gq:
+                apple:
+                    ecpuCores: 4
+                    gpuCores: 10
+                    memoryGb: 16
+                    name: Apple M2
+                    pcpuCores: 4
+                    ramTotalBytes: "17179869184"
+                cpu_count: 8
+                cpu_count_logical: 8
+                disk:
+                    /:
+                        total: "494384795648"
+                        used: "201417142272"
+                email: dominic.p.tanzillo@gmail.com
+                executable: /Users/dpt7/Documents/Classes/mlops-dementia-classifier/.venv1/bin/python
+                git:
+                    commit: 34e6c7a78789832ddb267110b0335f23533cede0
+                    remote: https://github.com/edominicduke/mlops-dementia-classifier.git
+                host: Dominics-MacBook-Pro-47.local
+                memory:
+                    total: "17179869184"
+                os: macOS-15.6.1-arm64-arm-64bit-Mach-O
+                program: -m src.models.train_model
+                python: CPython 3.13.7
+                root: /Users/dpt7/Documents/Classes/mlops-dementia-classifier
+                startedAt: "2025-11-23T23:03:35.576687Z"
+                writerId: p0tvw6yphrmcts9knn21m3jtla6g09gq
+        m: []
+        python_version: 3.13.7
+        t:
+            "1":
+                - 5
+                - 6
+                - 53
+            "2":
+                - 5
+                - 6
+                - 53
+            "3":
+                - 13
+            "4": 3.13.7
+            "5": 0.23.0
+            "12": 0.23.0
+            "13": darwin-arm64

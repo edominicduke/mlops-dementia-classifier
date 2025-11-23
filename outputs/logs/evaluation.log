@@ -6,3 +6,5 @@
 2025-11-23 16:16:54,111 — INFO — Full-dataset accuracy: 0.9802
 2025-11-23 16:16:54,114 — INFO — Saved evaluation results to /Users/dpt7/Documents/Classes/mlops-dementia-classifier/outputs/results/evaluation_results.json
 2025-11-23 16:16:54,298 — INFO — Saved confusion matrix to /Users/dpt7/Documents/Classes/mlops-dementia-classifier/outputs/results/cm.png
+2025-11-23 18:07:20,115 — INFO — Loaded model from /Users/dpt7/Documents/Classes/mlops-dementia-classifier/models/trained/xgboost_final.pkl
+2025-11-23 18:07:20,121 — INFO — Full-dataset accuracy: 0.9802
