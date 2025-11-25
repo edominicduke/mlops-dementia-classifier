@@ -3,7 +3,10 @@ import pandas as pd
 import json
 import joblib
 import wandb   #
-# Code followed by a # was generated from ChatGPT 5.1 at 5:21 on 11/23 to ensure proper Weights and Biases Deployment after issues with FlowML
+
+# Code followed by a # was edited by ChatGPT 5.1 at 5:21 PM on 11/23/25 to make this file compliant with Weights 
+# and Biases Deployment rather than MLFlow (original lines of code were written for MLFlow without AI, but modified 
+# later by ChatGPT 5.1 to work with Weights and Biases instead).
 
 from pathlib import Path
 from sklearn.model_selection import train_test_split, RandomizedSearchCV
@@ -38,7 +41,7 @@ def get_model(model_type, params):
         raise ValueError("Unknown model type.")
 
 
-def main():
+def train_model():
     cfg = load_config()
     project_root = Path(__file__).resolve().parents[2]
 
@@ -127,6 +130,11 @@ def main():
     final_art.add_file(str(final_path))   #
     wandb.log_artifact(final_art)   #
 
+    api_model_base_path = project_root / "app" 
+    api_model_path = api_model_base_path / "model.pkl"
+    api_model_base_path.mkdir(exist_ok=True, parents=True)
+    joblib.dump(model, api_model_path)
+
     results = {"val_accuracy": val_acc}
     results_file = results_dir / "training_results.json"
     with open(results_file, "w") as f:
@@ -138,4 +146,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    train_model()
