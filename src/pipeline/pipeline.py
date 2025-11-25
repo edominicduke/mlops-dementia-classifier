@@ -20,3 +20,6 @@ def run_pipeline():
     # Evaluate the model and return relevant metrics.
     metrics = evaluate_model()
     return metrics
+
+if __name__ == "__main__":
+    run_pipeline()

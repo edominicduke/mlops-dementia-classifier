@@ -2,6 +2,7 @@ import yaml
 import pandas as pd
 import json
 import joblib
+import os
 import wandb   #
 
 # Code followed by a # was edited by ChatGPT 5.1 at 5:21 PM on 11/23/25 to make this file compliant with Weights 
@@ -15,7 +16,6 @@ from sklearn.metrics import accuracy_score
 from xgboost import XGBClassifier
 
 from src.utils.logger import get_logger
-
 
 def load_config():
     project_root = Path(__file__).resolve().parents[2]
@@ -56,6 +56,10 @@ def train_model():
     results_dir.mkdir(parents=True, exist_ok=True)
 
     logger = get_logger("training", str(logs_dir / "training.log"))
+
+    wandb_key = os.environ.get("WANDB_API_KEY")
+    if wandb_key:  #
+        wandb.login(key=wandb_key)  #
 
     wandb.init(project="dementia-ml", name="training")   #
 
