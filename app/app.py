@@ -1,3 +1,5 @@
+# No AI tools were used to generate any code in this script. 
+
 from fastapi import FastAPI
 from pydantic import BaseModel
 import joblib
