@@ -1,0 +1,9 @@
+fastapi
+gradio
+uvicorn
+joblib
+pydantic
+pandas
+xgboost
+requests
+matplotlib
