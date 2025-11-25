@@ -1,8 +1,20 @@
+# No AI tools were used to generate any code in this script. 
+
 from src.pipeline.ingest_data import *
 from src.pipeline.preprocess_data import *
 from src.pipeline.feature_engineer_data import *
 from src.pipeline.train_model import *
 from src.pipeline.evaluate_model import *
+
+# If running this file directly, uncomment lines 11-17 and comment lines 3-7.
+
+"""
+from ingest_data import *
+from preprocess_data import *
+from feature_engineer_data import *
+from train_model import *
+from evaluate_model import *
+"""
 
 def run_pipeline():
     # Ingest data from the cloud and retrieve as a Pandas DataFrame.

@@ -1,3 +1,5 @@
+# No AI tools were used to generate any code in this script. 
+
 """
 This script assesses the data quality of the dementia dataset we will
 be using in our ML pipeline to train our simple classification model.
