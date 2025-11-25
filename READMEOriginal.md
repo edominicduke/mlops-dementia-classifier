@@ -1,6 +1,5 @@
 # Dementia Classification MLOps Project
 
-## Project Overview and Goals
 This repository implements an end to end MLOps workflow for a dementia classification model, including:
 
 - Data ingestion, cleaning, and feature engineering
@@ -10,18 +9,9 @@ This repository implements an end to end MLOps workflow for a dementia classific
 - Docker containerization
 - Cloud deployment with a front end on Hugging Face Spaces
 
-The goal of this project is to ultimately provide a 
-tool that can be used to classify whether an 
-individual has dementia or not. We realize that our
-model requires more information (14 kinds of 
-numerical values) than what an average person would 
-probably have at hand without visiting a hospital. 
-However, we hope, at the very least, that this tool 
-serves as motivation for more software developers to 
-develop prediction models that can predict whether 
-people have dementia or not even with limited 
-information so that they can get treatment early and
-live better lives as a result.
+The model predicts a binary dementia label from 14 normalized clinical and imaging features derived from the OASIS style dementia dataset.
+
+---
 
 ## Project Structure
 
@@ -69,22 +59,53 @@ live better lives as a result.
     └── utils/              # Logging and plotting utilities
 ```
 
-## Dataset Description
-The source of the data is the **[Kaggle Dementia Prediction Dataset](https://www.kaggle.com/datasets/shashwatwork/dementia-prediction-dataset?utm_source=chatgpt.com)**. This dataset comes directly from the Open Access Series of Imaging Studies (OASIS-2) longitudinal collection of 150 subjects of 373 MRI data. The data collection process was as follows. Each subject was scanned on two or more visits, separated by at least one year for a total of 373 imaging sessions. The dataset includes data on 1-5 individual T1-weighted MRI scans that were taken for each of the subjects (found from inspecting the dataset; the Kaggle dataset description incorrectly states “For each subject, 3 or 4 individual T1-weighted MRI scans obtained in single scan sessions are included”). All subjects are all aged between 60-96 and are right-handed. Therefore, insights gathered from this dataset may not apply to individuals below this age range and/or individuals who are left-handed.
+## Environment Setup
 
-## Model Architecture and Evaluation (INCOMPLETE)
+Create and activate a virtual environment, then install dependencies.
 
-## Cloud Services Used
-- **Cloud Storage:** Google Cloud Storage (GCS)
-- **Cloud Model Deployment Platform:** Google Cloud Run
+```
+python -m venv .venv
+source .venv/bin/activate      # On Windows: .venv\Scripts\activate
 
-## Setup and Usage Instructions (INCOMPLETE)
+pip install --upgrade pip
+pip install -r requirements.txt
+```
+## Datasets
+The dataset (under `data/raw/dementia_dataset.csv`) contains clinical and structural MRI derived features for patients with and without dementia.
+
+Key variables used by the model (after preprocessing and scaling):
+
+- Visit
+- MR Delay
+- M/F
+- Age
+- EDUC
+- SES
+- MMSE
+- CDR
+- eTIV
+- nWBV
+- ASF
+- ABV
+- CII
+- CDR_RATE
+
+The target label is a binary dementia indicator (for example Group in the original dataset), which is not passed to the model at inference time.
+
+Preprocessed versions of the dataset are saved under `data/processed/`:
+
+- preprocessed_dementia_dataset.csv
+- cleaned_dementia_dataset.csv
+- engineered_dementia_dataset.csv
+
+
+# Environment Setup
 
 Create and activate a virtual environment, then install dependencies:
 
 ```
 python -m venv .venv
-source .venv/bin/activate # On Windows: .venv\Scripts\activate
+source .venv/bin/activate
 pip install --upgrade pip
 pip install -r requirements.txt
 ```
@@ -238,6 +259,7 @@ payload = { "Visit": 0.0, "MR_Delay": 0.0, "M_F": 1, "Age": 0.736842105263158,
 print(requests.post(url, json=payload).text)
 ```
 
+
 # Gradio Front End
 
 `app/space_app.py` provides:
@@ -253,10 +275,3 @@ print(requests.post(url, json=payload).text)
 - All dependencies pinned
 - Model artifact reused across local, Docker, and cloud deployments
 - Complete pipeline from raw data to deployed inference preserved
-
-docker run -e WANDB_API_KEY=$WANDB_API_KEY 
-dementia-api train
-
-export WANDB_API_KEY=“YOUR_KEY_HERE”
-
-## Link to Deployed API and Front-End App (INCOMPLETE)
