@@ -12,3 +12,4 @@ requests==2.31.0
 google-cloud-storage==2.18.2
 matplotlib==3.10.7
 seaborn==0.13.2
+wandb==0.23.0
