@@ -38,7 +38,7 @@ EXPOSE 8080
 
 # Use training/serving entrypoint router
 # Entrypoint information was created via ChatGPT 5.1 11/24/25 at 10:10pm
-ENTRYPOINT ["app/entrypoint.sh"]
+ENTRYPOINT ["./app/entrypoint.sh"]
 
 # Default command
 CMD ["serve"]
