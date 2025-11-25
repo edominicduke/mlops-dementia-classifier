@@ -3,32 +3,42 @@ FROM python:3.11
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies (optional but safe)
+# Install system dependencies
+# Created with ChatGPT 5.1 at 11/24/25 at 10:13pm for fixing errors with dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
-    openssl \
     curl \
     gnupg \
-    build-essential \
-    && update-ca-certificates \
-    && rm -rf /var/lib/apt/lists/*
+    build-essential && \
+    update-ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt
 
 # Copy requirements files
-COPY requirements.txt .
 COPY requirements-api.txt .
 
 # Install all dependencies
-RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install --no-cache-dir -r requirements-api.txt
 
 # Copy entire project
-COPY . .
+COPY app/ ./app/
+COPY src/ ./src/
+COPY config/ ./config/
+COPY models/ ./models/
+COPY outputs/ ./outputs/
+COPY data/ ./data/
+COPY entrypoint.sh ./entrypoint.sh
 
-# Expose port (Hugging Face, Docker, Cloud Run all use $PORT)
+RUN chmod +x /app/entrypoint.sh
+
+# Expose port for API
 ENV PORT=8080
 EXPOSE 8080
 
-# Command to run your FastAPI app (YOUR API FILE IS IN ./app/app.py)
+# Use training/serving entrypoint router
+# Entrypoint information was created via ChatGPT 5.1 11/24/25 at 10:10pm
+ENTRYPOINT ["app/entrypoint.sh"]
 
-# Include entry points for serving/training (differentiate through POST /predict and POST /train)
-CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "8080"]
+# Default command
+CMD ["serve"]
