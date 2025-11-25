@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import joblib
 from pathlib import Path
 import pandas as pd
+from src.pipeline.pipeline import run_pipeline
 
 # -------------------------------------------------------
 # Initialize FastAPI
@@ -49,7 +50,7 @@ def health():
     return {"status": "ok"}
 
 # -------------------------------------------------------
-# Prediction endpoint
+# Prediction endpoint (Endpoint for Serving)
 # -------------------------------------------------------
 @app.post("/predict")
 def predict(input: Input):
@@ -91,3 +92,25 @@ def predict(input: Input):
         response["probability"] = float(proba)
 
     return response
+
+def reload_model():
+    global MODEL_PATH 
+    MODEL_PATH = Path(__file__).resolve().parent / "model.pkl"
+    global model 
+    model = joblib.load(MODEL_PATH)
+    global HAS_PROBA 
+    HAS_PROBA = hasattr(model, "predict_proba")
+
+# -------------------------------------------------------
+# Endpoint for Training
+# -------------------------------------------------------
+@app.post("/train")
+def train():
+    # Run the pipeline.
+    metrics = run_pipeline()
+
+    # Reload the model.
+    reload_model()
+
+    # Return metrics.
+    return metrics

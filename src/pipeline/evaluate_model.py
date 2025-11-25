@@ -5,7 +5,10 @@ import pandas as pd
 from pathlib import Path
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import wandb #
-# Code followed by a # was generated from ChatGPT 5.1 at 5:21 on 11/23 to ensure proper Weights and Biases Deployment after issues with FlowML
+
+# Code followed by a # was edited by ChatGPT 5.1 at 5:21 PM on 11/23/25 to make this file compliant with Weights 
+# and Biases Deployment rather than MLFlow (original lines of code were written for MLFlow without AI, but modified 
+# later by ChatGPT 5.1 to work with Weights and Biases instead).
 
 from src.utils.logger import get_logger
 from src.utils.visualization import plot_confusion_matrix
@@ -18,7 +21,7 @@ def load_config():
         return yaml.safe_load(f)
 
 
-def main():
+def evaluate_model():
     cfg = load_config()
     project_root = Path(__file__).resolve().parents[2]
 
@@ -75,6 +78,14 @@ def main():
     cm_art.add_file(str(cm_path))   #
     wandb.log_artifact(cm_art)   #
 
+    results = {}
+    results["accuracy"] = report["accuracy"]
+    results["precision"] = report["1"]["precision"]
+    results["recall"] = report["1"]["recall"]
+    results["f1-score"] = report["1"]["f1-score"]
+    results["support"] = report["1"]["support"]
+    return results
+
 
 if __name__ == "__main__":
-    main()
+    evaluate_model()

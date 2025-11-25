@@ -13,12 +13,13 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && update-ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy only dependency list first for caching layers
+# Copy requirements files
 COPY requirements.txt .
+COPY requirements-api.txt .
 
-# Install Python dependencies
-COPY requirements-api.txt requirements.txt
+# Install all dependencies
 RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements-api.txt
 
 # Copy entire project
 COPY . .
@@ -28,4 +29,6 @@ ENV PORT=8080
 EXPOSE 8080
 
 # Command to run your FastAPI app (YOUR API FILE IS IN ./app/app.py)
+
+# Include entry points for serving/training (differentiate through POST /predict and POST /train)
 CMD ["uvicorn", "app.app:app", "--host", "0.0.0.0", "--port", "8080"]
