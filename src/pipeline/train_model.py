@@ -1,13 +1,15 @@
+"""
+Code followed by a # was edited by ChatGPT 5.1 at 5:21 PM on 11/23/25 to make this file compliant with Weights 
+and Biases Deployment rather than MLFlow (original lines of code were written for MLFlow without AI, but modified 
+later by ChatGPT 5.1 to work with Weights and Biases instead).
+"""
+
 import yaml
 import pandas as pd
 import json
 import joblib
 import os
 import wandb   #
-
-# Code followed by a # was edited by ChatGPT 5.1 at 5:21 PM on 11/23/25 to make this file compliant with Weights 
-# and Biases Deployment rather than MLFlow (original lines of code were written for MLFlow without AI, but modified 
-# later by ChatGPT 5.1 to work with Weights and Biases instead).
 
 from pathlib import Path
 from sklearn.model_selection import train_test_split, RandomizedSearchCV

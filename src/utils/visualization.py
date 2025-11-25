@@ -1,3 +1,5 @@
+# No AI tools were used to generate any code in this script.
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 

@@ -1,3 +1,9 @@
+"""
+Code followed by a # was edited by ChatGPT 5.1 at 5:21 PM on 11/23/25 to make this file compliant with Weights 
+and Biases Deployment rather than MLFlow (original lines of code were written for MLFlow without AI, but modified 
+later by ChatGPT 5.1 to work with Weights and Biases instead).
+"""
+
 import json
 import yaml
 import joblib
@@ -5,10 +11,6 @@ import pandas as pd
 from pathlib import Path
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 import wandb #
-
-# Code followed by a # was edited by ChatGPT 5.1 at 5:21 PM on 11/23/25 to make this file compliant with Weights 
-# and Biases Deployment rather than MLFlow (original lines of code were written for MLFlow without AI, but modified 
-# later by ChatGPT 5.1 to work with Weights and Biases instead).
 
 from src.utils.logger import get_logger
 from src.utils.visualization import plot_confusion_matrix
